@@ -1,0 +1,63 @@
+<%- include('../includes/top.ejs') %>
+  <!-- navigation below  -->
+  <%- include('../includes/navigation.ejs') %>
+
+    <main>
+      <div class="container">
+        <% if (tags && tags.length) { %>
+          <form action="/" method="post" class="filter">
+            <div class="form-group">
+              <label for="tags">Tags:</label>
+              <select class="form-control" id="tags" name="tagIds" multiple>
+                <% tags.map((tag)=>{ %>
+                  <option value="<%= tag.id %>" <% if (selectedTags.includes(tag.id)) { %>selected<% } %>>
+                      <%= tag.name %>
+                  </option>
+                  <% }); %>
+              </select>
+            </div>
+            <button class="btn">Filter</button>
+            <a href="/" role="button" class="btn"> Clear Filter</a>
+          </form>
+          <% } %>
+            <% if (notes.length> 0) { %>
+              <h1>List of notes!</h1>
+              <% notes.map((note)=> { %>
+                <div class="media">
+                  <div class="media-left">
+                    <img class="media-object" src="<%= note.imageUrl %>" alt="<%= note.title %>" />
+                  </div>
+                  <div class="media-body">
+                    <h1 class="media-heading">
+                      <%= note.title %>
+                    </h1>
+                    <% if (note.tags) { %>
+                      <hr />
+                      <% note.tags.map((tag)=> { %>
+                        <span class="tags">
+                          <%= tag.name %>
+                        </span>
+                        <% }); %>
+                          <hr />
+                          <% } %>
+                            <p>
+                              <%= note.description %>
+                            </p>
+                            <div class="actions">
+                              <a href="/note/<%= note.id %>" role="button" class="btn"> View</a>
+                              <a href="/add-note/<%= note.id %>?isEditing=true" role="button" class="btn">
+                                Edit</a>
+                              <form action="/delete-note" method="POST">
+                                <input type="hidden" name="id" value="<%= note.id %>" />
+                                <button class="btn">Delete</button>
+                              </form>
+                            </div>
+                  </div>
+                </div>
+                <% }); %>
+                  <% } else { %>
+                    <h1>No data available!</h1>
+                    <% } %>
+      </div>
+    </main>
+    <%- include('../includes/bottom.ejs') %>
